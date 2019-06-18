@@ -6,30 +6,26 @@
 
 using namespace std;
 
-unsigned double RSA_Encrypt(int iValue, unsigned int iD, unsigned int iE, unsigned int iN)
+unsigned int RSA(int iValue, unsigned int iKey, unsigned int iModulus)
 {
-	unsigned double dEncryptedValue = 1;
+	unsigned int iComputeddValue = 1;
 
-	// First, encryption with sender's private key
-	for(int i = 1; i >= iD; i++)
-		dEncryptedValue = dEncryptedValue * iValue;
+	cout << " | " << iComputeddValue << " | " << iValue << " | " << iKey << " | " << endl;
+	
+	// Encryption with E or
+	// Decryption with D
+	for(int i = 1; i <= iKey; i++)
+	{
+		iComputeddValue = iComputeddValue * iValue;
+		cout << iComputeddValue << endl;
+	}
 
-	dEncryptedValue = dEncryptedValue % iN;
+	cout << " | " << iComputeddValue << " | " << iValue << " | " << iKey << " | ";
+	
+	iComputeddValue = iComputeddValue % iModulus;
 
-	// Second, encryption with receiver's public key
-	unsigned double dTemp = dEncryptedValue;
-	for(int i = 1; i >= iE; i++)
-		dEncryptedValue = dEncryptedValue * dTemp;
-
-	dEncryptedValue = dEncryptedValue % iN;
-
-	return dEncryptedValue;
+	return iComputeddValue;
 }
-
-/*unsigned double decrypt(int iValue, unsigned int iD, unsigned int iE , unsigned int iN)
-{
-
-}*/
 
 // In order to determine whether two numbers are co-prime (relatively prime), we can check
 // whether their gcd (greatest common divisor) is greater than 1. The gcd can be calculated by Euclid's algorithm:
@@ -48,6 +44,7 @@ unsigned int gcd(unsigned int a, unsigned int b)
 int main(int argc, char *argv[])
 {
 	int message[MESSAGE_SIZE];
+	int encryptedMessage[MESSAGE_SIZE];
 
 	// Checking the number of input has to be passed by the user
 	if (argc != 2)
@@ -66,9 +63,9 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	unsigned int iP, iQ, iK, iD_Sender, iD_Receiver, iE_Sender, iE_Receiver, iN, iTotientN;
+	unsigned int iP, iQ, iD, iE, iN, iTotientN;
 
-	fInput >> iP >> iQ >> iK;
+	fInput >> iP >> iQ;
 
 	int i = 0;
 	char cItem;
@@ -86,47 +83,41 @@ int main(int argc, char *argv[])
 	iN = iP * iQ;
 	iTotientN = (iP - 1) * (iQ - 1);
 
-	i = iN - 1;
-	int iTempCounter = 1;
-	while(i > 1)
+	iE = iN / 2;
+	while(i < (iN - 1))
 	{
-		if(gcd(i, iTotientN) == 1)
-		{
-			if(iTempCounter == 1)
-				iE_Sender = i;
-			if(iTempCounter == 2)
-			{
-				iE_Receiver = i;
-				break;
-			}
-			iTempCounter++;
-		}
-		i--;
+		if(gcd(iE, iTotientN) == 1)
+			break;
+			
+		iE++;
 	}
 
-	iD_Sender = ((iK * iTotientN) + 1) / iE_Sender;
-	iD_Receiver = ((iK * iTotientN) + 1) / iE_Receiver;
-
+	cout << pow(9,7)<< endl;
 
 	// RSA Double Encryption
 	i = 0;
-	while(i < MESSAGE_SIZE)
+	cout << "E: " << iE << endl;
+	cout << "N: " << iN << endl;
+	cout << "------ Encrypted message -------" << endl;
+	while(i < 1)
 	{
-		cout << "------ Encrypted message -------" << endl;
-		cout << RSA_Encrypt(message[i], iD_Sender, iE_Receiver, iN) << " ";
+		encryptedMessage[i] = RSA(message[i], 7, iN);
+		cout << encryptedMessage[i]  << ' ';
 		i++;
 	}
 	cout << endl;
 
 	// RSA Double Decryption
 	i = 0;
-	/*while(i < MESSAGE_SIZE)
+	cout << "D: " << iD << endl;
+	cout << "N: " << iN << endl;
+	cout << "------ Decrypted message -------" << endl;
+	while(i < 1)
 	{
-		cout << "------ Decrypted message -------" << endl;
-		cout << decrypt(message[i], iD_Receiver, iE_Sender, iN) << " ";
+		cout << RSA(encryptedMessage[i], 11, iN) << " ";
 		i++;
 	}
-	cout << endl;*/
+	cout << endl;
 
     return 0;
 }
