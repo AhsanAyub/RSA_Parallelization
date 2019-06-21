@@ -1,31 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
-
-#define MESSAGE_SIZE 10
+#include <stdio.h>
+#include <cmath>
 
 using namespace std;
 
-unsigned int RSA(int iValue, unsigned int iKey, unsigned int iModulus)
-{
-	unsigned int iComputeddValue = 1;
-
-	cout << " | " << iComputeddValue << " | " << iValue << " | " << iKey << " | " << endl;
-	
-	// Encryption with E or
-	// Decryption with D
-	for(int i = 1; i <= iKey; i++)
-	{
-		iComputeddValue = iComputeddValue * iValue;
-		cout << iComputeddValue << endl;
-	}
-
-	cout << " | " << iComputeddValue << " | " << iValue << " | " << iKey << " | ";
-	
-	iComputeddValue = iComputeddValue % iModulus;
-
-	return iComputeddValue;
-}
+#define MESSAGE_SIZE 10
 
 // In order to determine whether two numbers are co-prime (relatively prime), we can check
 // whether their gcd (greatest common divisor) is greater than 1. The gcd can be calculated by Euclid's algorithm:
@@ -43,8 +23,8 @@ unsigned int gcd(unsigned int a, unsigned int b)
 
 int main(int argc, char *argv[])
 {
-	int message[MESSAGE_SIZE];
-	int encryptedMessage[MESSAGE_SIZE];
+	unsigned int message[MESSAGE_SIZE];
+	unsigned long long encryptedMessage[MESSAGE_SIZE];
 
 	// Checking the number of input has to be passed by the user
 	if (argc != 2)
@@ -79,11 +59,19 @@ int main(int argc, char *argv[])
 	// Done reading from the file
 	fInput.close();
 
+	// Print plain text
+	cout << "------ Plaintext message -------" << endl;
+	for (i = 0; i < MESSAGE_SIZE; i++)
+		cout << message[i] << ' ';
+	cout << endl;
+
 	//Compute iN, iE, and iD
 	iN = iP * iQ;
-	iTotientN = (iP - 1) * (iQ - 1);
-
-	iE = iN / 2;
+	iP -= 1;
+	iQ -= 1;
+	iTotientN = iP * iQ;
+	
+	iE = 2;
 	while(i < (iN - 1))
 	{
 		if(gcd(iE, iTotientN) == 1)
@@ -92,30 +80,49 @@ int main(int argc, char *argv[])
 		iE++;
 	}
 
-	cout << pow(9,7)<< endl;
+	i = 1;
+	while(true)
+	{
+		iD = (iE * i - 1) % iTotientN;
+		if(!iD)
+		{
+			iD = i;
+			break;
+		}
+		i++;
+	}
 
 	// RSA Double Encryption
-	i = 0;
 	cout << "E: " << iE << endl;
 	cout << "N: " << iN << endl;
 	cout << "------ Encrypted message -------" << endl;
-	while(i < 1)
+	for(i = 0; i < MESSAGE_SIZE; i++)
 	{
-		encryptedMessage[i] = RSA(message[i], 7, iN);
+		encryptedMessage[i] = 1;
+		for (int j = 1; j <= iE; j++)
+			encryptedMessage[i] = encryptedMessage[i] * message[i];
+		
+		encryptedMessage[i] = encryptedMessage[i] % iN;
+
 		cout << encryptedMessage[i]  << ' ';
-		i++;
 	}
 	cout << endl;
 
 	// RSA Double Decryption
-	i = 0;
 	cout << "D: " << iD << endl;
 	cout << "N: " << iN << endl;
 	cout << "------ Decrypted message -------" << endl;
-	while(i < 1)
+	unsigned long long decryptedText;
+
+	for(i = 0; i < MESSAGE_SIZE; i++)
 	{
-		cout << RSA(encryptedMessage[i], 11, iN) << " ";
-		i++;
+		decryptedText = 1;
+		for (int j = 1; j <= iD; j++)
+			decryptedText = decryptedText * encryptedMessage[i];	
+		
+		decryptedText = decryptedText % iN;
+
+		cout << decryptedText << ' ';
 	}
 	cout << endl;
 
