@@ -9,7 +9,7 @@ If you use our implementation for academic research, you are highly encouraged t
 ```
 @inproceedings{ayub2019parallelized,
   title={Parallelized RSA Algorithm: An Analysis withPerformance Evaluation using OpenMP Library inHigh Performance Computing Environment},
-  author={Ayub, Md Ahsan and Onik, Zishan Ahmed and Steven, Snmith},
+  author={Ayub, Md Ahsan and Onik, Zishan Ahmed and Steven, Smith},
   booktitle={2019 22nd International Conference of Computer and Information Technology (ICCIT)},
   pages={1--6},
   year={2019},
