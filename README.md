@@ -7,11 +7,11 @@ If you use our implementation for academic research, you are highly encouraged t
 
 
 ```
-@inproceedings{ayub2019protocol,
-  title={A Protocol Independent Approach in Network Covert Channel Detection},
-  author={Ayub, Md Ahsan and Smith, Steven and Siraj, Ambareen},
-  booktitle={2019 IEEE International Conference on Computational Science and Engineering (CSE) and IEEE International Conference on Embedded and Ubiquitous Computing (EUC)},
-  pages={165--170},
+@inproceedings{ayub2019parallelized,
+  title={Parallelized RSA Algorithm: An Analysis with Performance Evaluation using OpenMP Library in High Performance Computing Environment},
+  author={Ayub, Md Ahsan and Onik, Zishan Ahmed and Smith, Steven},
+  booktitle={2019 22th International Conference of Computer and Information Technology (ICCIT)},
+  pages={1--6},
   year={2019},
   organization={IEEE}
 }
